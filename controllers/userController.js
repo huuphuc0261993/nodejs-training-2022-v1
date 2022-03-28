@@ -44,11 +44,18 @@ const updateUser = async (req, res) => {
     
     let id = req.params.id
 
-    let user = await User.update(req.body, { where: { id: id }})
-
-    res.status(200).send(user)
-    console.log(user)
-
+    User.update(req.body, {
+        where: { id: id }
+      })
+        .then(num => {
+            num == 1 ? res.send({ message: "Cập nhật thành công." }): res.send({ message: "Cập nhật thất bại" });
+        })
+        .catch(err => {
+          res.status(500).send({
+            message: "Đã có lỗi xảy ra"
+          });
+        });
+        
 }
 
 //delete user
@@ -56,9 +63,15 @@ const deleteUser = async (req, res) => {
     
     let id = req.params.id
 
-    await User.destroy({ where: { id: id }})
-    
-    res.status(200).send("User is deleted")
+    User.destroy({where: { id: id }})
+        .then(num => {
+            num == 1 ? res.send({ message: "Xóa thành công!" }): res.send({ message: "Xóa thất bại" });
+        })
+        .catch(err => {
+          res.status(500).send({
+            message: "Đã có lỗi xảy ra"
+          });
+        });
 
 }
 
